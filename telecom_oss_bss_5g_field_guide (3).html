@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telecom OSS/BSS/5G Field Guide — Complete Reference</title>
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --bg2: #0d1528;
+    --bg3: #111d35;
+    --card: #121f3d;
+    --card2: #162449;
+    --border: #1e3260;
+    --accent: #00d4ff;
+    --accent2: #7b5ea7;
+    --accent3: #00ff9f;
+    --accent4: #ff6b35;
+    --accent5: #ffd700;
+    --text: #e8f0fe;
+    --text2: #a0b4d0;
+    --text3: #6a85a8;
+    --oss-color: #00ff9f;
+    --bss-color: #ff6b35;
+    --core-color: #7b5ea7;
+    --ran-color: #ffd700;
+    --font-mono: "Courier New", Courier, monospace;
+    --r: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui,-apple-system,sans-serif; line-height: 1.6; overflow-x: hidden; }
+  body::before { content: ""; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(10,15,30,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 13px; color: var(--accent); text-decoration: none; white-space: nowrap; letter-spacing: 0.5px; }
+  .nav-signal { display: flex; gap: 3px; align-items: flex-end; }
+  .nav-signal span { background: var(--accent); border-radius: 1px; width: 4px; }
+  .nav-signal span:nth-child(1) { height: 6px; opacity: 0.4; }
+  .nav-signal span:nth-child(2) { height: 10px; opacity: 0.6; }
+  .nav-signal span:nth-child(3) { height: 14px; opacity: 0.8; }
+  .nav-signal span:nth-child(4) { height: 18px; }
+  .nav-tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; flex: 1; justify-content: center; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid transparent; white-space: nowrap; transition: all 0.2s; background: transparent; color: var(--text2); }
+  .nav-tab:hover,.nav-tab.active { background: var(--card); border-color: var(--border); color: var(--accent); }
+  .nav-meta { font-size: 11px; color: var(--text3); white-space: nowrap; font-family: var(--font-mono); }
+  .hero { position: relative; z-index: 1; padding: 80px 24px 60px; text-align: center; max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-family: var(--font-mono); color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; padding: 6px 14px; border: 1px solid rgba(0,212,255,0.3); border-radius: 20px; }
+  .hero-eyebrow::before { content: ""; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1;transform:scale(1); } 50% { opacity:0.4;transform:scale(0.8); } }
+  .hero h1 { font-size: clamp(36px,6vw,64px); font-weight: 800; line-height: 1.1; letter-spacing: -1px; margin-bottom: 20px; }
+  .hero h1 em { font-style: italic; background: linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-subtitle { font-size: 18px; color: var(--text2); max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
+  .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 48px; }
+  .hero-stat .number { display: block; font-size: 40px; font-weight: 900; font-family: var(--font-mono); color: var(--accent); line-height: 1; }
+  .hero-stat .label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+  .hero-author { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); font-size: 13px; color: var(--text2); }
+  .hero-author .avatar { width: 28px; height: 28px; background: linear-gradient(135deg,var(--accent),var(--accent2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--bg); }
+  .arch-section { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px 60px; }
+  .section-header { text-align: center; margin-bottom: 40px; }
+  .section-label { font-size: 11px; font-family: var(--font-mono); color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+  .section-header h2 { font-size: clamp(24px,4vw,36px); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .section-header p { color: var(--text2); max-width: 600px; margin: 0 auto; }
+  .telecom-stack { display: grid; grid-template-columns: 1fr; gap: 3px; margin-bottom: 48px; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
+  .stack-layer { padding: 18px 24px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: all 0.2s; }
+  .stack-layer:hover { filter: brightness(1.15); }
+  .layer-bss { background: linear-gradient(90deg,rgba(255,107,53,0.15),rgba(255,107,53,0.05)); border-left: 4px solid var(--bss-color); }
+  .layer-oss { background: linear-gradient(90deg,rgba(0,255,159,0.12),rgba(0,255,159,0.03)); border-left: 4px solid var(--oss-color); }
+  .layer-core { background: linear-gradient(90deg,rgba(123,94,167,0.15),rgba(123,94,167,0.05)); border-left: 4px solid var(--core-color); }
+  .layer-transport { background: linear-gradient(90deg,rgba(0,212,255,0.1),rgba(0,212,255,0.02)); border-left: 4px solid var(--accent); }
+  .layer-ran { background: linear-gradient(90deg,rgba(255,215,0,0.1),rgba(255,215,0,0.02)); border-left: 4px solid var(--ran-color); }
+  .layer-ue { background: linear-gradient(90deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01)); border-left: 4px solid #888; }
+  .layer-icon { font-size: 28px; width: 40px; text-align: center; flex-shrink: 0; }
+  .layer-info { flex: 1; }
+  .layer-name { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+  .layer-desc { font-size: 12px; color: var(--text2); }
+  .layer-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tag-bss { background: rgba(255,107,53,0.2); color: var(--bss-color); }
+  .tag-oss { background: rgba(0,255,159,0.2); color: var(--oss-color); }
+  .tag-core { background: rgba(123,94,167,0.25); color: #b89fd4; }
+  .tag-signal { background: rgba(0,212,255,0.15); color: var(--accent); }
+  .tag-hw { background: rgba(255,215,0,0.15); color: var(--ran-color); }
+  .topic-section { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px 60px; }
+  .domain-group { margin-bottom: 60px; }
+  .domain-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .domain-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .domain-header h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+  .domain-count { margin-left: auto; font-size: 12px; color: var(--text3); font-family: var(--font-mono); }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 16px; }
+  .topic-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden; }
+  .topic-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0; transition: opacity 0.2s; }
+  .topic-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .topic-card:hover::before { opacity: 1; }
+  .card-bss::before { background: var(--bss-color); }
+  .card-oss::before { background: var(--oss-color); }
+  .card-core::before { background: var(--core-color); }
+  .card-arch::before { background: var(--accent); }
+  .card-ai::before { background: var(--accent2); }
+  .card-icon { font-size: 24px; margin-bottom: 12px; }
+  .card-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .card-desc { font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 12px; }
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .card-arrow { position: absolute; bottom: 16px; right: 16px; font-size: 14px; color: var(--text3); transition: all 0.2s; }
+  .topic-card:hover .card-arrow { color: var(--accent); transform: translateX(2px); }
+  .detail-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); overflow-y: auto; padding: 24px; }
+  .detail-overlay.active { display: flex; justify-content: center; align-items: flex-start; }
+  .detail-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; max-width: 900px; width: 100%; margin: 0 auto; overflow: hidden; }
+  .detail-header { padding: 28px 32px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+  .detail-header h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .detail-header p { color: var(--text2); font-size: 14px; max-width: 500px; line-height: 1.5; }
+  .detail-close { background: var(--bg3); border: 1px solid var(--border); color: var(--text); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+  .detail-close:hover { background: var(--card2); border-color: var(--accent); color: var(--accent); }
+  .detail-body { padding: 32px; }
+  .detail-body h3 { font-size: 16px; font-weight: 700; color: var(--accent); margin: 28px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .detail-body h3::before { content: ""; width: 16px; height: 2px; background: var(--accent); }
+  .detail-body p { color: var(--text2); font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
+  .detail-body ul,.detail-body ol { color: var(--text2); font-size: 14px; line-height: 1.7; padding-left: 20px; margin-bottom: 16px; }
+  .detail-body li { margin-bottom: 6px; }
+  .arch-diagram { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; margin: 16px 0; font-family: var(--font-mono); font-size: 11px; color: var(--text2); overflow-x: auto; white-space: pre; line-height: 1.6; }
+  .nf-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 12px; margin: 16px 0; }
+  .nf-card { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; transition: all 0.2s; }
+  .nf-card:hover { border-color: var(--core-color); background: rgba(123,94,167,0.1); }
+  .nf-abbr { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--core-color); margin-bottom: 4px; }
+  .nf-name { font-size: 11px; color: var(--text2); margin-bottom: 8px; font-style: italic; }
+  .nf-desc { font-size: 11px; color: var(--text3); line-height: 1.5; }
+  .flow-steps { display: flex; flex-direction: column; gap: 0; margin: 16px 0; }
+  .flow-step { display: flex; gap: 16px; align-items: flex-start; position: relative; }
+  .flow-step::before { content: ""; position: absolute; left: 16px; top: 36px; bottom: -8px; width: 2px; background: var(--border); }
+  .flow-step:last-child::before { display: none; }
+  .step-num { width: 32px; height: 32px; background: var(--card2); border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; font-family: var(--font-mono); color: var(--accent); flex-shrink: 0; margin-top: 4px; position: relative; z-index: 1; }
+  .step-content { padding: 4px 0 20px; flex: 1; }
+  .step-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .step-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; }
+  .compare-table th { background: var(--bg3); color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border); }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .callout { border-radius: var(--r); padding: 16px 20px; margin: 16px 0; font-size: 13px; line-height: 1.6; border-left: 3px solid; }
+  .callout-info { background: rgba(0,212,255,0.08); border-color: var(--accent); color: #a8d8ea; }
+  .callout-warn { background: rgba(255,215,0,0.08); border-color: var(--ran-color); color: #f0d060; }
+  .callout-key { background: rgba(0,255,159,0.08); border-color: var(--oss-color); color: #80ffcc; }
+  .callout-ai { background: rgba(123,94,167,0.15); border-color: var(--accent2); color: #c4a8e8; }
+  .callout strong { display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .code-block { background: #060c18; border: 1px solid var(--border); border-radius: var(--r); padding: 16px 20px; font-family: var(--font-mono); font-size: 12px; color: #a8d8ea; overflow-x: auto; margin: 12px 0; line-height: 1.6; white-space: pre; }
+  .iface-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 10px; margin: 14px 0; }
+  .iface-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
+  .iface-name { font-family: var(--font-mono); font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 3px; }
+  .iface-pair { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .iface-desc { font-size: 11px; color: var(--text3); }
+  footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; color: var(--text3); font-size: 13px; margin-top: 40px; }
+  footer .footer-brand { font-family: var(--font-mono); color: var(--accent); font-size: 16px; margin-bottom: 8px; }
+  .share-row { display: flex; gap: 12px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .share-btn { padding: 8px 18px; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; cursor: pointer; background: transparent; color: var(--text2); text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width:640px) { .hero h1 { font-size:32px; } .hero-stats { gap:24px; } .cards-grid { grid-template-columns:1fr; } .nf-grid { grid-template-columns:repeat(2,1fr); } .detail-body { padding:20px; } .detail-header { padding:20px; } }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-signal"><span></span><span></span><span></span><span></span></div>
+    Telecom Field Guide
+  </a>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-action="scroll-top">Overview</button>
+    <button class="nav-tab" data-action="scroll-section" data-target="all-topics">All Topics</button>
+    <button class="nav-tab" data-action="open-topic" data-topic="5g-flow">5G Flow</button>
+    <button class="nav-tab" data-action="open-topic" data-topic="nf-reference">NF Reference</button>
+    <button class="nav-tab" data-action="open-topic" data-topic="ai-usecases">AI Use Cases</button>
+    <button class="nav-tab" data-action="open-topic" data-topic="agentic-telecom">Agentic AI</button>
+  </div>
+  <div class="nav-meta">v1.0 &nbsp;·&nbsp; 2026</div>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Living Reference · OSS / BSS / 5G Core</div>
+  <h1>Telecom <em>Field Guide</em></h1>
+  <p class="hero-subtitle">The complete reference for Operations Support Systems, Business Support Systems, 5G Core architecture, network functions, AI/ML applications, and agentic AI in telecommunications.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="number">42</span><span class="label">Topics covered</span></div>
+    <div class="hero-stat"><span class="number">7</span><span class="label">Domain areas</span></div>
+    <div class="hero-stat"><span class="number">30+</span><span class="label">Network Functions</span></div>
+    <div class="hero-stat"><span class="number">25+</span><span class="label">AI use cases</span></div>
+  </div>
+  <div class="hero-author"><div class="avatar">VM</div><span>Vinit Metange &nbsp;·&nbsp; AI PM &amp; Engineering Leader &nbsp;·&nbsp; Bengaluru</span></div>
+</section>
+
+<section class="arch-section">
+  <div class="section-header">
+    <div class="section-label">Architecture Overview</div>
+    <h2>The Telecom Stack — 6 Layers</h2>
+    <p>Five distinct layers from business to radio. Click any layer for a deep dive.</p>
+  </div>
+  <div class="telecom-stack">
+    <div class="stack-layer layer-bss" onclick="openTopic('bss-overview')">
+      <div class="layer-icon">💼</div>
+      <div class="layer-info"><div class="layer-name">BSS — Business Support Systems</div><div class="layer-desc">CRM, billing, order management, revenue assurance, product catalog — the commercial engine</div></div>
+      <div class="layer-tags"><span class="tag tag-bss">CRM</span><span class="tag tag-bss">Billing</span><span class="tag tag-bss">OMS</span><span class="tag tag-bss">PCRF</span></div>
+    </div>
+    <div class="stack-layer layer-oss" onclick="openTopic('oss-overview')">
+      <div class="layer-icon">🔧</div>
+      <div class="layer-info"><div class="layer-name">OSS — Operations Support Systems</div><div class="layer-desc">Network inventory, fault management, performance management, provisioning, configuration</div></div>
+      <div class="layer-tags"><span class="tag tag-oss">FCAPS</span><span class="tag tag-oss">NMS</span><span class="tag tag-oss">EMS</span><span class="tag tag-oss">Inventory</span></div>
+    </div>
+    <div class="stack-layer layer-core" onclick="openTopic('5g-core')">
+      <div class="layer-icon">🧠</div>
+      <div class="layer-info"><div class="layer-name">5G Core (5GC) — Service-Based Architecture</div><div class="layer-desc">AMF, SMF, UPF, NRF, UDM, UDR, UDSF, PCF, AUSF, NEF, NSSF — cloud-native NFs</div></div>
+      <div class="layer-tags"><span class="tag tag-core">AMF</span><span class="tag tag-core">SMF</span><span class="tag tag-core">UPF</span><span class="tag tag-core">NRF</span><span class="tag tag-core">SBA</span></div>
+    </div>
+    <div class="stack-layer layer-transport" onclick="openTopic('transport')">
+      <div class="layer-icon">🔗</div>
+      <div class="layer-info"><div class="layer-name">Transport &amp; Backhaul — Fronthaul / Midhaul / Backhaul</div><div class="layer-desc">Fiber, microwave, IP/MPLS, SD-WAN connecting RAN to core</div></div>
+      <div class="layer-tags"><span class="tag tag-signal">MPLS</span><span class="tag tag-signal">eCPRI</span><span class="tag tag-signal">FlexE</span></div>
+    </div>
+    <div class="stack-layer layer-ran" onclick="openTopic('ran-oran')">
+      <div class="layer-icon">📡</div>
+      <div class="layer-info"><div class="layer-name">RAN — Radio Access Network (O-RAN)</div><div class="layer-desc">gNB, O-RU, O-DU, O-CU, RIC (Near-RT, Non-RT) — intelligent distributed radio</div></div>
+      <div class="layer-tags"><span class="tag tag-hw">gNB</span><span class="tag tag-hw">O-RAN</span><span class="tag tag-hw">xApp</span><span class="tag tag-hw">rApp</span></div>
+    </div>
+    <div class="stack-layer layer-ue">
+      <div class="layer-icon">📱</div>
+      <div class="layer-info"><div class="layer-name">UE — User Equipment</div><div class="layer-desc">Smartphones, IoT devices, CPE, industrial modems — anything with a SIM/eSIM</div></div>
+      <div class="layer-tags"><span class="tag tag-signal">5G NR</span><span class="tag tag-signal">NAS</span><span class="tag tag-signal">SUPI</span></div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top:60px;">
+    <div class="section-label">Complete Architecture</div>
+    <h2>OSS ↔ BSS ↔ 5G Core Interface Map</h2>
+    <p>How all three domains exchange data, commands, and events in real-time.</p>
+  </div>
+  <div class="arch-diagram">  ┌─────────────────────────────────────────────────────────────────────┐
+  │                       BUSINESS LAYER (BSS)                          │
+  │   CRM ─── Product Catalog ─── Order Management ─── Billing ─── RA  │
+  └────────────────────────┬────────────────────────────────────────────┘
+                           │ TMF Open APIs (TMF641, TMF620, TMF622)
+  ┌────────────────────────▼────────────────────────────────────────────┐
+  │                    OPERATIONS LAYER (OSS)                            │
+  │  Fault Mgmt ── Perf Mgmt ── Inventory ── Provisioning ── Config     │
+  └──────────┬───────────────────────────────────────────┬──────────────┘
+             │ 3GPP O1 (NETCONF/YANG)                    │ O1/A1/O2
+  ┌──────────▼──────────────────────────────┐   ┌────────▼─────────────┐
+  │     5G CORE (SBA)                        │   │   O-RAN / SMO / RIC │
+  │  AMF─SMF─UPF─UDM─NRF─PCF─NEF─NSSF     │   │  Non-RT RIC (rApps)  │
+  │  UDR─UDSF─AUSF─CHF─SEPP─NWDAF─BSF     │   │  Near-RT RIC (xApps) │
+  └──────────────────┬──────────────────────┘   └──────────────────────┘
+      N2(NG-AP)      │ N3(GTP-U)                          │ F1/E1/Xn
+  ┌──────────────────▼──────────────────────────────────────▼──────────┐
+  │              RAN: O-RU ── O-DU ── O-CU-CP ── O-CU-UP              │
+  └────────────────────────────┬────────────────────────────────────────┘
+                               │ NR-Uu (5G Air Interface)
+  ┌────────────────────────────▼────────────────────────────────────────┐
+  │                  UE (User Equipment)                                 │
+  └─────────────────────────────────────────────────────────────────────┘</div>
+</section>
+
+<section class="topic-section" id="all-topics">
+  <div class="section-header" style="margin-bottom:48px;">
+    <div class="section-label">42 Topics · 7 Domains</div>
+    <h2>Explore Every Domain</h2>
+    <p>Click any card to open the full deep-dive with architecture diagrams, flows, tables, and PM interview angles.</p>
+  </div>
+
+  <div class="domain-group">
+    <div class="domain-header">
+      <div class="domain-dot" style="background:var(--bss-color)"></div>
+      <h3 style="color:var(--bss-color)">Business Support Systems (BSS)</h3>
+      <span class="domain-count">8 topics</span>
+    </div>
+    <div class="cards-grid">
+      <div class="topic-card card-bss" onclick="openTopic('bss-overview')"><div class="card-icon">💼</div><div class="card-title">BSS Overview &amp; Architecture</div><div class="card-desc">The commercial layer of telecom. How CRM, billing, OMS, and product catalog interlock with the TMF framework.</div><div class="card-tags"><span class="tag tag-bss">Architecture</span><span class="tag tag-bss">TMF</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-bss" onclick="openTopic('crm-telecom')"><div class="card-icon">👤</div><div class="card-title">CRM &amp; Customer Experience</div><div class="card-desc">Subscriber lifecycle, customer hierarchy (account/service/billing), 360° customer view, CLM.</div><div class="card-tags"><span class="tag tag-bss">CRM</span><span class="tag tag-bss">CLM</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-bss" onclick="openTopic('billing')"><div class="card-icon">💳</div><div class="card-title">Billing &amp; Revenue Management</div><div class="card-desc">CDR processing, mediation, rating, invoicing, convergent charging, revenue assurance — end-to-end.</div><div class="card-tags"><span class="tag tag-bss">CDR</span><span class="tag tag-bss">Rating</span><span class="tag tag-bss">OCS</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-bss" onclick="openTopic('order-mgmt')"><div class="card-icon">📋</div><div class="card-title">Order Management &amp; Fulfillment</div><div class="card-desc">Service order decomposition, orchestration, provisioning handoff to OSS, order fallout handling.</div><div class="card-tags"><span class="tag tag-bss">OMS</span><span class="tag tag-bss">BPMN</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-bss" onclick="openTopic('product-catalog')"><div class="card-icon">📦</div><div class="card-title">Product Catalog Management</div><div class="card-desc">TMF620, offer bundling, product vs service vs resource decomposition, spec-driven catalog design.</div><div class="card-tags"><span class="tag tag-bss">TMF620</span><span class="tag tag-bss">Catalog</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-bss" onclick="openTopic('pcrf-pcc')"><div class="card-icon">⚡</div><div class="card-title">PCRF / Policy &amp; Charging Control</div><div class="card-desc">Policy Control &amp; Charging Rules — QoS enforcement, fair use policies, dynamic policy rules for sessions.</div><div class="card-tags"><span class="tag tag-bss">PCRF</span><span class="tag tag-bss">QoS</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-bss" onclick="openTopic('revenue-assurance')"><div class="card-icon">🔍</div><div class="card-title">Revenue Assurance &amp; Fraud</div><div class="card-desc">Leakage detection, usage reconciliation, fraud management system, SIM swap attacks, Wangiri.</div><div class="card-tags"><span class="tag tag-bss">RA</span><span class="tag tag-bss">FMS</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-bss" onclick="openTopic('tmf-apis')"><div class="card-icon">🔌</div><div class="card-title">TM Forum Open APIs &amp; ODA</div><div class="card-desc">TMF620–TMF666 Open APIs, ODA Canvas, component-based BSS/OSS, IG1142, REST-based integration.</div><div class="card-tags"><span class="tag tag-bss">TMF</span><span class="tag tag-bss">REST</span><span class="tag tag-bss">ODA</span></div><span class="card-arrow">→</span></div>
+    </div>
+  </div>
+
+  <div class="domain-group">
+    <div class="domain-header">
+      <div class="domain-dot" style="background:var(--oss-color)"></div>
+      <h3 style="color:var(--oss-color)">Operations Support Systems (OSS)</h3>
+      <span class="domain-count">8 topics</span>
+    </div>
+    <div class="cards-grid">
+      <div class="topic-card card-oss" onclick="openTopic('oss-overview')"><div class="card-icon">🔧</div><div class="card-title">OSS Overview &amp; FCAPS</div><div class="card-desc">Fault, Configuration, Accounting, Performance, Security management — the FCAPS framework in depth.</div><div class="card-tags"><span class="tag tag-oss">FCAPS</span><span class="tag tag-oss">ITIL</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-oss" onclick="openTopic('network-inventory')"><div class="card-icon">🗂️</div><div class="card-title">Network Inventory Management</div><div class="card-desc">Physical, logical, and service inventory. CFS/RFS mapping, resource reservation, topology graph.</div><div class="card-tags"><span class="tag tag-oss">NIM</span><span class="tag tag-oss">CFS/RFS</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-oss" onclick="openTopic('fault-mgmt')"><div class="card-icon">🚨</div><div class="card-title">Fault Management &amp; Alarm Correlation</div><div class="card-desc">Alarm lifecycle, root cause analysis, event correlation, noise reduction, SNMP/NETCONF notifications.</div><div class="card-tags"><span class="tag tag-oss">Alarms</span><span class="tag tag-oss">RCA</span><span class="tag tag-oss">SNMP</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-oss" onclick="openTopic('perf-mgmt')"><div class="card-icon">📊</div><div class="card-title">Performance Management &amp; KPIs</div><div class="card-desc">PM counters, KPI dashboards, threshold breaches, SLA monitoring, radio vs core KPI taxonomy.</div><div class="card-tags"><span class="tag tag-oss">PM</span><span class="tag tag-oss">KPIs</span><span class="tag tag-oss">SLA</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-oss" onclick="openTopic('provisioning')"><div class="card-icon">⚙️</div><div class="card-title">Service Provisioning &amp; Activation</div><div class="card-desc">North-bound order intake from BSS, decomposition into resource commands, southbound push to NEs.</div><div class="card-tags"><span class="tag tag-oss">Activation</span><span class="tag tag-oss">NETCONF</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-oss" onclick="openTopic('config-mgmt')"><div class="card-icon">🗃️</div><div class="card-title">Configuration Management (YANG/NETCONF)</div><div class="card-desc">YANG data models, NETCONF/RESTCONF protocol, intent-based networking, golden config, compliance.</div><div class="card-tags"><span class="tag tag-oss">YANG</span><span class="tag tag-oss">NETCONF</span><span class="tag tag-oss">RESTCONF</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-oss" onclick="openTopic('ems-nms')"><div class="card-icon">🖥️</div><div class="card-title">EMS / NMS Architecture</div><div class="card-desc">Element Management vs Network Management vs Service Management. OSS stack layers explained.</div><div class="card-tags"><span class="tag tag-oss">EMS</span><span class="tag tag-oss">NMS</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-oss" onclick="openTopic('slicing-mgmt')"><div class="card-icon">🍰</div><div class="card-title">Network Slice Management (NSSMF)</div><div class="card-desc">CSMF → NSMF → NSSMF hierarchy, slice lifecycle management, SLA assurance, isolation guarantee.</div><div class="card-tags"><span class="tag tag-oss">Slicing</span><span class="tag tag-oss">NSSMF</span></div><span class="card-arrow">→</span></div>
+    </div>
+  </div>
+
+  <div class="domain-group">
+    <div class="domain-header">
+      <div class="domain-dot" style="background:var(--core-color)"></div>
+      <h3 style="color:#b89fd4">5G Core (5GC) — Network Functions</h3>
+      <span class="domain-count">9 topics</span>
+    </div>
+    <div class="cards-grid">
+      <div class="topic-card card-core" onclick="openTopic('5g-core')"><div class="card-icon">🧠</div><div class="card-title">5G Core Architecture (SBA)</div><div class="card-desc">Service-Based Architecture, HTTP/2 SBI, consumer-producer NF model, cloud-native design principles.</div><div class="card-tags"><span class="tag tag-core">SBA</span><span class="tag tag-core">HTTP/2</span><span class="tag tag-core">3GPP R15+</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-core" onclick="openTopic('amf')"><div class="card-icon">🎯</div><div class="card-title">AMF — Access &amp; Mobility Management</div><div class="card-desc">Registration, authentication anchor, mobility management, NAS termination, location services.</div><div class="card-tags"><span class="tag tag-core">AMF</span><span class="tag tag-core">NAS</span><span class="tag tag-core">N1/N2</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-core" onclick="openTopic('smf-upf')"><div class="card-icon">🌊</div><div class="card-title">SMF &amp; UPF — Session &amp; User Plane</div><div class="card-desc">Session establishment, PFCP (N4), UPF as packet forwarder, QoS enforcement, UL/DL classification.</div><div class="card-tags"><span class="tag tag-core">SMF</span><span class="tag tag-core">UPF</span><span class="tag tag-core">PFCP</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-core" onclick="openTopic('udr-udm-udsf')"><div class="card-icon">🗄️</div><div class="card-title">UDR / UDM / UDSF — Data Layer</div><div class="card-desc">UDR (storage), UDM (subscriber management), UDSF (unstructured NF-state) — distinctions explained.</div><div class="card-tags"><span class="tag tag-core">UDR</span><span class="tag tag-core">UDM</span><span class="tag tag-core">UDSF</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-core" onclick="openTopic('nrf')"><div class="card-icon">🗺️</div><div class="card-title">NRF — Network Repository Function</div><div class="card-desc">NF registration, discovery, OAuth2 token issuance, heartbeat, NF profile management.</div><div class="card-tags"><span class="tag tag-core">NRF</span><span class="tag tag-core">Discovery</span><span class="tag tag-core">OAuth2</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-core" onclick="openTopic('pcf-ausf')"><div class="card-icon">🛡️</div><div class="card-title">PCF &amp; AUSF — Policy &amp; Security</div><div class="card-desc">Policy Control Function for QoS rules; AUSF for primary authentication — 5G-AKA, EAP-AKA.</div><div class="card-tags"><span class="tag tag-core">PCF</span><span class="tag tag-core">AUSF</span><span class="tag tag-core">5G-AKA</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-core" onclick="openTopic('nef-nssf')"><div class="card-icon">🔗</div><div class="card-title">NEF &amp; NSSF — Exposure &amp; Slicing</div><div class="card-desc">Network Exposure Function (API gateway to 3rd parties); NSSF for network slice selection.</div><div class="card-tags"><span class="tag tag-core">NEF</span><span class="tag tag-core">NSSF</span><span class="tag tag-core">NSSAI</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-core" onclick="openTopic('5g-flow')"><div class="card-icon">🔄</div><div class="card-title">Complete 5G Registration &amp; PDU Flow</div><div class="card-desc">Step-by-step: UE power-on → AMF registration → authentication → PDU session → data plane UP.</div><div class="card-tags"><span class="tag tag-core">Flow</span><span class="tag tag-core">NAS</span><span class="tag tag-core">PDU</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-core" onclick="openTopic('nf-reference')"><div class="card-icon">📚</div><div class="card-title">Complete NF Reference (30+ Functions)</div><div class="card-desc">Every 3GPP NF: abbreviation, full name, role, interfaces, and which 3GPP release introduced it.</div><div class="card-tags"><span class="tag tag-core">Reference</span><span class="tag tag-core">3GPP</span></div><span class="card-arrow">→</span></div>
+    </div>
+  </div>
+
+  <div class="domain-group">
+    <div class="domain-header">
+      <div class="domain-dot" style="background:var(--ran-color)"></div>
+      <h3 style="color:var(--ran-color)">RAN, O-RAN &amp; Transport</h3>
+      <span class="domain-count">6 topics</span>
+    </div>
+    <div class="cards-grid">
+      <div class="topic-card card-arch" onclick="openTopic('ran-oran')"><div class="card-icon">📡</div><div class="card-title">RAN &amp; O-RAN Architecture</div><div class="card-desc">O-RU, O-DU, O-CU split. F1/E1/Xn interfaces, CU-CP vs CU-UP, RIC layers, Open Fronthaul.</div><div class="card-tags"><span class="tag tag-hw">O-RAN</span><span class="tag tag-hw">gNB</span><span class="tag tag-hw">RIC</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('ric-xapp')"><div class="card-icon">🧩</div><div class="card-title">RIC — Near-RT &amp; Non-RT</div><div class="card-desc">RAN Intelligent Controller: xApps for near-real-time radio control, rApps for non-real-time optimization.</div><div class="card-tags"><span class="tag tag-hw">xApp</span><span class="tag tag-hw">rApp</span><span class="tag tag-hw">E2</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('5g-nr')"><div class="card-icon">📶</div><div class="card-title">5G NR Air Interface</div><div class="card-desc">FR1/FR2 bands, numerologies, NR-Uu, beamforming, massive MIMO, HARQ, PDSCH/PUSCH.</div><div class="card-tags"><span class="tag tag-hw">NR</span><span class="tag tag-hw">mmWave</span><span class="tag tag-hw">MIMO</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('transport')"><div class="card-icon">🔗</div><div class="card-title">Transport &amp; Fronthaul</div><div class="card-desc">eCPRI, fronthaul bandwidth calc, midhaul, backhaul, IP/MPLS, FlexE, strict latency requirements.</div><div class="card-tags"><span class="tag tag-signal">eCPRI</span><span class="tag tag-signal">MPLS</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('network-slicing')"><div class="card-icon">🍰</div><div class="card-title">Network Slicing End-to-End</div><div class="card-desc">NSSAI, S-NSSAI, slice types (eMBB, URLLC, mMTC), isolation, RAN slice, 5G core slice.</div><div class="card-tags"><span class="tag tag-core">NSSAI</span><span class="tag tag-core">eMBB</span><span class="tag tag-core">URLLC</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('mec')"><div class="card-icon">🏭</div><div class="card-title">MEC — Multi-Access Edge Computing</div><div class="card-desc">ETSI MEC, edge UPF, local breakout, latency use cases (AR/VR, autonomous), ULCL architecture.</div><div class="card-tags"><span class="tag tag-signal">MEC</span><span class="tag tag-signal">Edge UPF</span></div><span class="card-arrow">→</span></div>
+    </div>
+  </div>
+
+  <div class="domain-group">
+    <div class="domain-header">
+      <div class="domain-dot" style="background:var(--accent2)"></div>
+      <h3 style="color:#b89fd4">AI/ML Use Cases in Telecom</h3>
+      <span class="domain-count">6 topics</span>
+    </div>
+    <div class="cards-grid">
+      <div class="topic-card card-ai" onclick="openTopic('ai-usecases')"><div class="card-icon">🤖</div><div class="card-title">AI/ML in Telecom — 25+ Use Cases</div><div class="card-desc">Production use cases mapped to OSS, BSS, RAN, and 5G Core with maturity ratings and ML approaches.</div><div class="card-tags"><span class="tag tag-core">ML</span><span class="tag tag-core">GenAI</span><span class="tag tag-core">AIOps</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-ai" onclick="openTopic('predictive-maintenance')"><div class="card-icon">🔮</div><div class="card-title">Predictive Network Maintenance</div><div class="card-desc">Anomaly detection on PM counters, LSTM-based failure prediction, predictive RCA, triage automation.</div><div class="card-tags"><span class="tag tag-core">AIOps</span><span class="tag tag-core">LSTM</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-ai" onclick="openTopic('ran-optimization')"><div class="card-icon">📡</div><div class="card-title">AI-Driven RAN Optimization</div><div class="card-desc">Self-Organizing Network (SON), RL-based beamforming, load balancing, HO optimization, xApp ML.</div><div class="card-tags"><span class="tag tag-hw">SON</span><span class="tag tag-hw">RL</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-ai" onclick="openTopic('churn-clv')"><div class="card-icon">💰</div><div class="card-title">Churn Prediction &amp; CLV Modeling</div><div class="card-desc">Behavioral features, gradient boosting for churn, LTV scoring, next-best-action models for BSS.</div><div class="card-tags"><span class="tag tag-bss">Churn</span><span class="tag tag-bss">CLV</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-ai" onclick="openTopic('fraud-ai')"><div class="card-icon">🚫</div><div class="card-title">AI-Powered Fraud Detection</div><div class="card-desc">Graph neural networks for SIM fraud, anomaly scoring on CDRs, bypass detection, Wangiri patterns.</div><div class="card-tags"><span class="tag tag-bss">GNN</span><span class="tag tag-bss">Fraud</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-ai" onclick="openTopic('agentic-telecom')"><div class="card-icon">🦾</div><div class="card-title">Agentic AI in Telecom</div><div class="card-desc">Multi-agent SON, autonomous RCA agents, GenAI for network config, LLM-powered NOC copilots.</div><div class="card-tags"><span class="tag tag-core">Agents</span><span class="tag tag-core">NOC</span><span class="tag tag-core">GenAI</span></div><span class="card-arrow">→</span></div>
+    </div>
+  </div>
+
+  <div class="domain-group">
+    <div class="domain-header">
+      <div class="domain-dot" style="background:var(--accent)"></div>
+      <h3 style="color:var(--accent)">Protocols, Standards &amp; Interfaces</h3>
+      <span class="domain-count">5 topics</span>
+    </div>
+    <div class="cards-grid">
+      <div class="topic-card card-arch" onclick="openTopic('3gpp-releases')"><div class="card-icon">📜</div><div class="card-title">3GPP Releases Timeline</div><div class="card-desc">Rel-15 (5G baseline) through Rel-18 (5G-Advanced). Key features per release, what changed and when.</div><div class="card-tags"><span class="tag tag-signal">3GPP</span><span class="tag tag-signal">Rel-18</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('interfaces')"><div class="card-icon">↔️</div><div class="card-title">Reference Points &amp; Interfaces</div><div class="card-desc">N1–N33, F1, E1, Xn, X2, S1, NG — every interface, connecting entities, and protocol used.</div><div class="card-tags"><span class="tag tag-core">N1-N33</span><span class="tag tag-signal">Reference</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('sbi-protocols')"><div class="card-icon">🌐</div><div class="card-title">SBI &amp; Southbound Protocols</div><div class="card-desc">HTTP/2 + JSON (SBI), PFCP (N4), DIAMETER, GTP-U/C, SNMP, NETCONF, OpenConfig — all protocols.</div><div class="card-tags"><span class="tag tag-core">HTTP/2</span><span class="tag tag-signal">GTP</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('tmf-oda')"><div class="card-icon">🏗️</div><div class="card-title">TM Forum ODA Framework</div><div class="card-desc">Open Digital Architecture canvas, component-based OSS/BSS, ODA Component Framework, IG1142.</div><div class="card-tags"><span class="tag tag-bss">ODA</span><span class="tag tag-bss">TMF</span></div><span class="card-arrow">→</span></div>
+      <div class="topic-card card-arch" onclick="openTopic('security-telecom')"><div class="card-icon">🔐</div><div class="card-title">Telecom Security Architecture</div><div class="card-desc">SEPP, NDS/IP, 5G SUCI/SUPI concealment, roaming security, SS7/Diameter signaling threats.</div><div class="card-tags"><span class="tag tag-core">SEPP</span><span class="tag tag-core">SUCI</span></div><span class="card-arrow">→</span></div>
+    </div>
+  </div>
+</section>
+<!-- Detail Overlay -->
+<div class="detail-overlay" id="detail-overlay" onclick="closeOnBg(event)">
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-header">
+      <div>
+        <div class="detail-tag" id="detail-tag"></div>
+        <h2 class="detail-title" id="detail-title"></h2>
+      </div>
+      <button class="detail-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="detail-body" id="detail-body"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="nav-signal"><span></span><span></span><span></span><span></span></div>
+    <span>Telecom OSS/BSS/5G Field Guide · Built for PM Interview Prep · 40+ Topics</span>
+    <span style="color:var(--text3);font-family:var(--font-mono);font-size:11px">v1.0 · 2025</span>
+  </div>
+</footer>
+
+<script>
+const topics = {
+
+'bss-overview': {
+  tag: 'BSS Domain',
+  title: 'BSS — Business Support Systems Overview',
+  body: `
+<div class="arch-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│                    BSS ARCHITECTURE                          │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
+│  │  CRM     │  │  Order   │  │ Product  │  │ Billing/ │   │
+│  │ Customer │  │ Mgmt     │  │ Catalog  │  │ Revenue  │   │
+│  │ Relations│  │ (OM)     │  │ (PCM)    │  │ Mgmt     │   │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘   │
+│       └──────────────┴─────────────┴──────────────┘         │
+│                         BSS Integration Layer                │
+│                    (SOA/ESB or API Gateway)                  │
+├─────────────────────────────────────────────────────────────┤
+│  BSS ←→ OSS via SOA/REST/TMF APIs (TMF620, TMF641, TMF666)  │
+│  BSS ←→ 5G Core via NEF, CHF (N28 - Online Charging)        │
+└─────────────────────────────────────────────────────────────┘</div>
+<h4>Core BSS Components</h4>
+<table>
+<tr><th>Component</th><th>Function</th><th>Key Standard</th></tr>
+<tr><td>CRM</td><td>Customer lifecycle, complaints, interactions</td><td>TMF629, TMF632</td></tr>
+<tr><td>Order Management</td><td>Service order orchestration, decomposition</td><td>TMF641, TMF622</td></tr>
+<tr><td>Product Catalog</td><td>Product/service/resource catalog definitions</td><td>TMF620</td></tr>
+<tr><td>Billing / Revenue Mgmt</td><td>CDR collection, rating, invoicing, collections</td><td>TMF666, 3GPP CHF</td></tr>
+<tr><td>Mediation</td><td>CDR normalization from network to billing</td><td>3GPP TS 32.240</td></tr>
+<tr><td>Revenue Assurance</td><td>Leakage detection, reconciliation</td><td>TM Forum GB941</td></tr>
+<tr><td>Partner Mgmt</td><td>Roaming settlements, MVNO management</td><td>TMF630</td></tr>
+</table>
+<h4>BSS ↔ OSS Integration Flow</h4>
+<ol>
+<li><strong>Order Capture</strong>: CRM receives customer order → Product Catalog validates offer → OM creates service order</li>
+<li><strong>Order Decomposition</strong>: OM decomposes into service and resource orders → passes to OSS Service Orchestration</li>
+<li><strong>Network Provisioning</strong>: OSS provisions network resources (5G slice, IP addresses, QoS profiles)</li>
+<li><strong>Activation Confirmation</strong>: OSS confirms activation → OM updates order status → CRM notifies customer</li>
+<li><strong>Charging Start</strong>: BSS sends charging trigger to 5G CHF/PCF via N28/N7 interfaces</li>
+</ol>
+<div class="callout callout-key"><strong>PM Interview Angle:</strong> BSS modernization is about moving from monolithic stacks (Amdocs, Oracle CBSS) to microservices-based, cloud-native, TM Forum ODA-compliant components. Rakuten Mobile built the first greenfield cloud-native BSS+OSS stack. Key metrics: Order fallout rate (&lt;2%), billing accuracy (&gt;99.9%), time-to-market for new offers.</div>
+`},
+
+'oss-overview': {
+  tag: 'OSS Domain',
+  title: 'OSS — Operations Support Systems & FCAPS',
+  body: `
+<div class="arch-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│                    OSS ARCHITECTURE STACK                    │
+├────────────────────────────────┬────────────────────────────┤
+│  SERVICE MANAGEMENT LAYER      │  BUSINESS MGMT LAYER        │
+│  (FCAPS + Service Assurance)   │  (SLA, Dashboards, Reports) │
+├────────────────────────────────┴────────────────────────────┤
+│             NETWORK MANAGEMENT LAYER                         │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌───────────────┐  │
+│  │ Fault    │ │Config    │ │Accounting│ │ Performance   │  │
+│  │ Mgmt     │ │Mgmt      │ │Mgmt      │ │ Mgmt          │  │
+│  │ (FM)     │ │(CM)      │ │(AM)      │ │ (PM)          │  │
+│  └──────────┘ └──────────┘ └──────────┘ └───────────────┘  │
+│              Security Mgmt (SM) ← crosses all               │
+├─────────────────────────────────────────────────────────────┤
+│                 ELEMENT MANAGEMENT LAYER                     │
+│              EMS / NMS per vendor/domain                     │
+├─────────────────────────────────────────────────────────────┤
+│  5G Core ←O1→  SMO  ←O2→  Cloud Infra  ←E2→  Near-RT RIC  │
+│  gNBs ←NG-OAM→ EMS  ←NETCONF/YANG→  CM DB                  │
+└─────────────────────────────────────────────────────────────┘</div>
+<h4>FCAPS Framework</h4>
+<table>
+<tr><th>Domain</th><th>Full Name</th><th>Key Functions</th><th>Tools/Protocols</th></tr>
+<tr><td>F</td><td>Fault Management</td><td>Alarm collection, correlation, triage, ticketing</td><td>SNMP, Netconf, TT systems</td></tr>
+<tr><td>C</td><td>Configuration Mgmt</td><td>Provision, change mgmt, config backup/restore, CMDB</td><td>NETCONF/YANG, OpenConfig</td></tr>
+<tr><td>A</td><td>Accounting Mgmt</td><td>CDR collection, usage data records, input to billing</td><td>3GPP PM files, SFTP</td></tr>
+<tr><td>P</td><td>Performance Mgmt</td><td>KPI collection, threshold alerts, capacity planning</td><td>3GPP TS 28.550, PM files</td></tr>
+<tr><td>S</td><td>Security Mgmt</td><td>Access control, audit logs, vulnerability scanning</td><td>AAA, RBAC, SIEM</td></tr>
+</table>
+<h4>OSS ↔ 5G Core Integration (O1 Interface)</h4>
+<ul>
+<li><strong>O1 Interface</strong>: SMO ↔ 5G NFs for FCAPS operations — uses NETCONF/YANG and REST</li>
+<li><strong>O2 Interface</strong>: SMO ↔ O-Cloud for infrastructure lifecycle management</li>
+<li><strong>A1 Interface</strong>: Non-RT RIC ↔ Near-RT RIC for policy and ML model delivery</li>
+<li><strong>E2 Interface</strong>: Near-RT RIC ↔ E2 nodes (O-CU, O-DU) for real-time RAN control</li>
+</ul>
+<div class="callout callout-info"><strong>Key PM Metrics for OSS:</strong> MTTR (Mean Time to Repair), alarm-to-ticket ratio, configuration drift rate, PM data completeness %, change success rate, automation coverage %.</div>
+`},
+
+'5g-core': {
+  tag: '5G Core',
+  title: '5G Core Network — Service-Based Architecture',
+  body: `
+<div class="arch-diagram">
+        ┌───────────────────────────────────────────┐
+        │        5G CORE — SERVICE-BASED ARCHITECTURE│
+        │                                           │
+  UE ───┤ N1  ┌─────┐ N8  ┌─────┐ N10 ┌─────┐     │
+        │     │ AMF │────→│ UDM │────→│ SMF │     │
+  gNB ──┤ N2  └──┬──┘     └─────┘     └──┬──┘     │
+        │       N11           N7          │N4       │
+        │     ┌─────┐     ┌─────┐      ┌─────┐     │
+        │     │ SMF │────→│ PCF │      │ UPF │──→ DN│
+        │     └─────┘     └─────┘      └─────┘     │
+        │                                N9↑        │
+        │  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐     │
+        │  │ NRF  │ │ NSSF │ │ AUSF │ │ NEF  │     │
+        │  └──────┘ └──────┘ └──────┘ └──────┘     │
+        │  ┌──────┐ ┌──────┐                        │
+        │  │ UDR  │ │UDSF  │  ← Storage NFs         │
+        │  └──────┘ └──────┘                        │
+        └───────────────────────────────────────────┘
+           All NF-to-NF via HTTP/2 + JSON (SBI)</div>
+<h4>Service-Based Architecture (SBA) Principles</h4>
+<ul>
+<li><strong>Each NF is a microservice</strong> exposing services via RESTful APIs on HTTP/2</li>
+<li><strong>NRF is the service registry</strong> — NFs register and discover each other via NRF</li>
+<li><strong>OAuth2 authorization</strong> — NF consumers get tokens from NRF for NF-service access</li>
+<li><strong>No fixed point-to-point links</strong> — any NF can call any NF if authorized</li>
+<li><strong>Stateless NFs</strong> — state stored in UDR/UDSF, enabling horizontal scaling</li>
+</ul>
+<h4>4G EPC vs 5G Core Comparison</h4>
+<table>
+<tr><th>Function</th><th>4G EPC NF</th><th>5G Core NF</th><th>Key Difference</th></tr>
+<tr><td>Mobility/Session</td><td>MME</td><td>AMF + SMF</td><td>Split into mobility (AMF) and session (SMF)</td></tr>
+<tr><td>User Plane</td><td>SGW-U + PGW-U</td><td>UPF</td><td>Unified, cloud-native, PFCP on N4</td></tr>
+<tr><td>Policy</td><td>PCRF</td><td>PCF</td><td>REST APIs, network slicing support</td></tr>
+<tr><td>Subscription</td><td>HSS</td><td>UDM + UDR</td><td>Separated data (UDR) from logic (UDM)</td></tr>
+<tr><td>Auth</td><td>HSS (EPS-AKA)</td><td>AUSF + UDM</td><td>5G-AKA + EAP-AKA' support</td></tr>
+<tr><td>Service Discovery</td><td>None (static config)</td><td>NRF</td><td>Dynamic, cloud-native service registry</td></tr>
+<tr><td>Control Plane Protocol</td><td>GTP-C / Diameter</td><td>HTTP/2 + JSON</td><td>Web-native, easier to integrate with IT</td></tr>
+</table>
+`},
+
+'5g-flow': {
+  tag: '5G End-to-End Flow',
+  title: 'Complete 5G Flow: UE Power-On to Data Transfer',
+  body: `
+<div class="arch-diagram">
+UE ──── gNB ──── AMF ──── SMF ──── UPF ──── Internet
+                  │         │
+                 UDM       PCF
+                 AUSF      UDR
+                 NRF</div>
+<h4>Step-by-Step Registration & PDU Session Flow</h4>
+<ol>
+<li><strong>RRC Connection Setup</strong>: UE → gNB — UE sends RRCSetupRequest on RACH; gNB responds with RRCSetup; UE sends RRCSetupComplete + Registration Request (NAS)</li>
+<li><strong>Initial UE Message</strong>: gNB → AMF (N2) — gNB wraps NAS in NGAP Initial UE Message; AMF picks up Registration Request; AMF selects UDM, AUSF via NRF lookup</li>
+<li><strong>Authentication (5G-AKA)</strong>: AMF → AUSF → UDM — AMF triggers Nausf_UEAuthentication; AUSF fetches auth vectors from UDM (Nudm_UEAuthentication); UDM generates SUPI from SUCI, computes 5G HE AV; AUSF returns auth challenge to AMF → UE; UE computes RES* → confirms identity</li>
+<li><strong>NAS Security Setup</strong>: AMF selects NAS encryption + integrity algorithms; sends Security Mode Command → UE; UE replies Security Mode Complete</li>
+<li><strong>UDM Registration</strong>: AMF → UDM (Nudm_UECM_Registration) — AMF registers as serving AMF for this UE; UDM stores AMF address; UDM pushes subscription data to AMF (allowed NSSAIs, service areas)</li>
+<li><strong>Registration Accept</strong>: AMF → UE — AMF sends Registration Accept with 5G-GUTI (new temp ID), allowed NSSAI, TAI list; UE sends Registration Complete</li>
+<li><strong>PDU Session Establishment Request</strong>: UE → AMF (NAS) — UE requests PDU session (S-NSSAI, DNN, PDU type IPv4); AMF selects SMF via NRF (based on S-NSSAI + DNN)</li>
+<li><strong>SMF Session Create</strong>: AMF → SMF (Nsmf_PDUSession_CreateSMContext) — SMF fetches UE subscription from UDM (Nudm_SDM); SMF gets policy from PCF (Npcf_SMPolicyControl_Create) — QoS rules, charging rules</li>
+<li><strong>UPF Selection & PFCP</strong>: SMF selects UPF (based on DNN, location, load); SMF → UPF via PFCP Session Establishment Request (N4); UPF allocates UE IP address; PFCP rules installed (PDRs, FARs)</li>
+<li><strong>N2 PDU Session Response</strong>: SMF → AMF (Namf_Communication_N1N2MessageTransfer) with N2 SM Info + NAS PDU Session Establishment Accept; AMF → gNB via NGAP PDU Session Resource Setup Request</li>
+<li><strong>DRB Setup (Air Interface)</strong>: gNB configures Data Radio Bearer (DRB) for the PDU session; sends RRCReconfiguration to UE; UE confirms with RRCReconfigurationComplete</li>
+<li><strong>N2 Setup Response</strong>: gNB → AMF — NGAP PDU Session Resource Setup Response; AMF → SMF confirms DRB is up</li>
+<li><strong>User Plane Active</strong>: UE ↔ gNB (NR-Uu) ↔ UPF (N3, GTP-U) ↔ Data Network; Data flows through GTP-U tunnels on N3 interface</li>
+<li><strong>Charging Start</strong>: UPF reports usage to CHF via SMF (N4 URR triggers); SMF → CHF (Nchf_ConvergedCharging) — online or offline charging begins; CDRs generated for BSS mediation</li>
+</ol>
+<div class="callout callout-info"><strong>BSS Hook:</strong> Step 14 — CHF generates CDRs → Mediation normalizes → Rating engine applies tariff → Billing creates invoice. All controlled by PCF policy rules from the product catalog in BSS.</div>
+<div class="callout callout-warn"><strong>OSS Hook:</strong> Every NF state change generates O1 notifications to SMO/OSS. AMF registration counts, SMF session rates, UPF throughput — all collected as PM counters visible in OSS Performance Mgmt.</div>
+`},
+
+'nf-reference': {
+  tag: '5G Core NFs',
+  title: '5G Network Functions — Complete Reference',
+  body: `
+<h4>Control Plane NFs</h4>
+<div class="nf-grid">
+<div class="nf-card"><div class="nf-name">AMF</div><div class="nf-full">Access & Mobility Management Function</div><div class="nf-desc">UE registration, mobility management, NAS termination, authentication coordination, SMF selection. Interfaces: N1 (UE), N2 (gNB), N8 (UDM), N11 (SMF), N12 (AUSF), N15 (PCF).</div></div>
+<div class="nf-card"><div class="nf-name">SMF</div><div class="nf-full">Session Management Function</div><div class="nf-desc">PDU session lifecycle (create/modify/release), UPF selection, IP address allocation, PFCP control over UPF, charging session mgmt. Interfaces: N4 (UPF), N7 (PCF), N10 (UDM), N11 (AMF).</div></div>
+<div class="nf-card"><div class="nf-name">UPF</div><div class="nf-full">User Plane Function</div><div class="nf-desc">Packet routing/forwarding, QoS enforcement, traffic usage reporting, UL/DL classifier, branching point for multi-homing. PFCP controlled by SMF via N4. GTP-U on N3 (gNB) and N9 (UPF-UPF).</div></div>
+<div class="nf-card"><div class="nf-name">PCF</div><div class="nf-full">Policy Control Function</div><div class="nf-desc">Policy decisions for sessions (QoS, charging, gating), AM policy for UE, slice selection policy. Replaces 4G PCRF. Interfaces: N7 (SMF), N5 (AF), N15 (AMF), N36 (UDR).</div></div>
+<div class="nf-card"><div class="nf-name">AUSF</div><div class="nf-full">Authentication Server Function</div><div class="nf-desc">Executes 5G-AKA and EAP-AKA' authentication procedures. Works with UDM to generate auth vectors. Interfaces: N12 (AMF), N13 (UDM).</div></div>
+<div class="nf-card"><div class="nf-name">NEF</div><div class="nf-full">Network Exposure Function</div><div class="nf-desc">Exposes 5G Core capabilities to external AFs and third parties. Event exposure, monitoring, parameter provisioning. North-bound: REST APIs. Interfaces: N29, N33 (AF), N30 (PCF).</div></div>
+<div class="nf-card"><div class="nf-name">NRF</div><div class="nf-full">Network Repository Function</div><div class="nf-desc">Service registry and discovery for all NFs. NF registration, NF profile storage, NF discovery, OAuth2 token authorization. All NFs register here at startup.</div></div>
+<div class="nf-card"><div class="nf-name">NSSF</div><div class="nf-full">Network Slice Selection Function</div><div class="nf-desc">Selects the network slice instance for a UE based on requested NSSAI, subscription info, and operator policy. Returns allowed NSSAI + target AMF set.</div></div>
+<div class="nf-card"><div class="nf-name">CHF</div><div class="nf-full">Charging Function</div><div class="nf-desc">Converged charging (online + offline). Nchf_ConvergedCharging API. Receives charging data from SMF/UPF. Generates CDRs for BSS mediation. Replaces 4G OCS + OFCS.</div></div>
+<div class="nf-card"><div class="nf-name">SEPP</div><div class="nf-full">Security Edge Protection Proxy</div><div class="nf-desc">Inter-PLMN SBI security — message filtering, topology hiding, encryption of inter-operator signaling. Sits at roaming boundary. Uses N32 interface.</div></div>
+<div class="nf-card"><div class="nf-name">NWDAF</div><div class="nf-full">Network Data Analytics Function</div><div class="nf-desc">Native 5G analytics NF. Collects data from NFs, provides analytics to AMF, SMF, PCF. Contains MTLF (model training) and ANLF (inference). Key for AI-native 5G.</div></div>
+<div class="nf-card"><div class="nf-name">BSF</div><div class="nf-full">Binding Support Function</div><div class="nf-desc">Maintains binding between PCF and PDU sessions. Enables PCF discovery based on UE IP and DNN/S-NSSAI. Prevents multi-PCF binding conflicts.</div></div>
+</div>
+<h4>Data Storage NFs</h4>
+<div class="nf-grid">
+<div class="nf-card" style="border-color:var(--accent3)"><div class="nf-name" style="color:var(--accent3)">UDR</div><div class="nf-full">Unified Data Repository</div><div class="nf-desc">The single structured data store for the 5G Core. Stores subscription data (used by UDM), policy data (used by PCF), application data (used by NEF), and structured data for analytics (NWDAF). REST-based Nudr API.</div></div>
+<div class="nf-card" style="border-color:var(--accent3)"><div class="nf-name" style="color:var(--accent3)">UDM</div><div class="nf-full">Unified Data Management</div><div class="nf-desc">Application logic layer over UDR. Handles SUCI→SUPI de-concealment, auth credential generation, subscription management, SMS, UE context management. Services: Nudm_UEAuthentication, Nudm_SDM, Nudm_UECM, Nudm_EE.</div></div>
+<div class="nf-card" style="border-color:var(--accent3)"><div class="nf-name" style="color:var(--accent3)">UDSF</div><div class="nf-full">Unstructured Data Storage Function</div><div class="nf-desc">Stores unstructured/context data for stateless NFs (mainly AMF, SMF). Enables NF statelessness and horizontal scaling — NF can restart and reload state from UDSF. Key for cloud-native 5G.</div></div>
+</div>
+<h4>Key Interface Reference</h4>
+<table>
+<tr><th>Interface</th><th>Between</th><th>Protocol</th><th>Purpose</th></tr>
+<tr><td>N1</td><td>UE ↔ AMF</td><td>NAS (over N2)</td><td>UE registration, session management NAS messages</td></tr>
+<tr><td>N2</td><td>gNB ↔ AMF</td><td>NGAP / SCTP</td><td>Control plane between RAN and core</td></tr>
+<tr><td>N3</td><td>gNB ↔ UPF</td><td>GTP-U / UDP</td><td>User plane data tunnel</td></tr>
+<tr><td>N4</td><td>SMF ↔ UPF</td><td>PFCP / UDP</td><td>Session management and forwarding rules</td></tr>
+<tr><td>N6</td><td>UPF ↔ Data Network</td><td>IP</td><td>User plane to internet/enterprise</td></tr>
+<tr><td>N7</td><td>SMF ↔ PCF</td><td>HTTP/2</td><td>Session policy control</td></tr>
+<tr><td>N8</td><td>AMF ↔ UDM</td><td>HTTP/2</td><td>UE subscription data fetch</td></tr>
+<tr><td>N11</td><td>AMF ↔ SMF</td><td>HTTP/2</td><td>Session management</td></tr>
+<tr><td>N12</td><td>AMF ↔ AUSF</td><td>HTTP/2</td><td>Authentication</td></tr>
+<tr><td>N28</td><td>SMF ↔ CHF</td><td>HTTP/2</td><td>Converged charging</td></tr>
+<tr><td>O1</td><td>NF ↔ SMO</td><td>NETCONF/REST</td><td>OSS FCAPS over O-RAN O1</td></tr>
+<tr><td>E2</td><td>RIC ↔ E2 Node</td><td>E2AP / SCTP</td><td>Near-RT RAN control</td></tr>
+</table>
+`},
+
+'udr-udm-udsf': {
+  tag: '5G Core — Storage NFs',
+  title: 'UDR, UDM & UDSF — Data Layer Deep Dive',
+  body: `
+<div class="arch-diagram">
+        ┌────────────────────────────────────────┐
+        │         5G DATA LAYER HIERARCHY         │
+        │                                        │
+        │   PCF ──Nudr──→ ┌──────┐              │
+        │   NEF ──Nudr──→ │ UDR  │ ← Data Store │
+        │   NWDAF─Nudr──→ └──────┘              │
+        │                     ↑ Nudr             │
+        │                 ┌──────┐               │
+        │   AMF ──Nudm──→ │ UDM  │ ← Logic Layer │
+        │   SMF ──Nudm──→ └──────┘               │
+        │                                        │
+        │   AMF ──Nudsf→ ┌──────┐               │
+        │   SMF ──Nudsf→ │UDSF  │ ← State Store  │
+        │                └──────┘               │
+        └────────────────────────────────────────┘</div>
+<h4>UDR — What Data It Stores</h4>
+<table>
+<tr><th>Data Category</th><th>Consumer NF</th><th>Examples</th></tr>
+<tr><td>Subscription Data</td><td>UDM</td><td>IMSI, MSISDN, allowed NSSAIs, DNN configs, QoS profiles, roaming permissions</td></tr>
+<tr><td>Policy Data</td><td>PCF</td><td>AM policies, session policies, UE policy sets, slice-specific rules</td></tr>
+<tr><td>Application Data</td><td>NEF</td><td>AF influence data, PFD (Packet Flow Descriptions), BDT policies</td></tr>
+<tr><td>Analytics Data</td><td>NWDAF</td><td>Historical analytics, ML training data, UE behavior profiles</td></tr>
+</table>
+<h4>UDM Services (Nudm API)</h4>
+<ul>
+<li><strong>Nudm_UEAuthentication</strong>: Generate auth data (5G-AKA / EAP-AKA'), SUCI de-concealment, confirm auth result</li>
+<li><strong>Nudm_SubscriberDataManagement (SDM)</strong>: Subscribe/fetch UE subscription data, subscription change notifications</li>
+<li><strong>Nudm_UEContextManagement (UECM)</strong>: Register/deregister serving AMF or SMF, store/retrieve UE context pointers</li>
+<li><strong>Nudm_EventExposure (EE)</strong>: Notify AMF/SMF of subscription data changes (e.g. roaming profile update)</li>
+</ul>
+<h4>Identity Chain: IMSI → SUPI → SUCI → GUTI</h4>
+<table>
+<tr><th>Identity</th><th>Description</th><th>Where Used</th></tr>
+<tr><td>IMSI</td><td>International Mobile Subscriber Identity — permanent ID on SIM</td><td>UDR, HSS (4G)</td></tr>
+<tr><td>SUPI</td><td>Subscription Permanent Identifier — 5G name for IMSI, or NAI format</td><td>UDM, core NFs</td></tr>
+<tr><td>SUCI</td><td>Subscription Concealed Identifier — SUPI encrypted with HPLMN public key (ECIES)</td><td>Over-the-air (N1), never exposed on radio</td></tr>
+<tr><td>GUTI</td><td>Globally Unique Temporary Identity — temp ID assigned by AMF at registration</td><td>NAS signaling after registration</td></tr>
+</table>
+<h4>UDSF — Why Stateless NFs Matter</h4>
+<ul>
+<li>Cloud-native NFs (AMF, SMF) store runtime session context in UDSF, not in local memory</li>
+<li>If an AMF pod crashes and restarts, it fetches UE context from UDSF — zero session loss</li>
+<li>Enables horizontal autoscaling: any AMF instance can serve any UE</li>
+<li>UDSF uses Nudsf API; stores blobs (unstructured) unlike UDR's structured records</li>
+</ul>
+<div class="callout callout-ai"><strong>AI Use Case:</strong> NWDAF reads UDR for historical UE behavior to train churn/QoS prediction models. Real-time UE context in UDSF can feed streaming ML pipelines for anomaly detection.</div>
+`},
+
+'nrf': {
+  tag: '5G Core',
+  title: 'NRF — Network Repository Function & Service Discovery',
+  body: `
+<h4>NF Registration & Discovery Flow</h4>
+<ol>
+<li><strong>NF Boot</strong>: New NF instance starts → sends HTTP PUT to NRF: Nnrf_NFManagement_NFRegister</li>
+<li><strong>NF Profile</strong>: NRF stores NF profile (type, FQDN/IP, capacity, supported services, slice info)</li>
+<li><strong>Consumer Discovery</strong>: NF needing a service sends GET to NRF: Nnrf_NFDiscovery_Request (nf-type, service-names, S-NSSAI filter)</li>
+<li><strong>NRF Response</strong>: NRF returns list of matching NF instances with endpoints and load info</li>
+<li><strong>OAuth2 Token</strong>: Consumer requests access token from NRF for the target NF service → NRF validates and issues JWT; Consumer calls target NF with Bearer token in Authorization header</li>
+</ol>
+<div class="arch-diagram">
+NF-Consumer                 NRF                  NF-Producer
+    │──PUT /nf-instances──→  │                        │
+    │                        │  (stores profile)      │
+    │──GET /nf-instances?──→ │                        │
+    │   nf-type=SMF          │                        │
+    │←─ [SMF profile list] ──│                        │
+    │──POST /oauth2/token──→ │                        │
+    │←─ {access_token} ──────│                        │
+    │──────── HTTP/2 + Bearer token ─────────────────→│
+    │←──────── 200 OK ────────────────────────────────│</div>
+<h4>NF Profile JSON Structure</h4>
+<div class="arch-diagram">
+{
+  "nfInstanceId": "uuid-smf-01",
+  "nfType": "SMF",
+  "nfStatus": "REGISTERED",
+  "plmnList": [{"mcc": "440", "mnc": "11"}],
+  "sNssais": [{"sst": 1, "sd": "000001"}],
+  "smfInfo": {
+    "sNssaiSmfInfoList": [...],
+    "taiList": [...]
+  },
+  "ipv4Addresses": ["10.0.1.10"],
+  "capacity": 100,
+  "nfServiceList": {
+    "nsmf-pdusession": {
+      "serviceInstanceId": "uuid",
+      "serviceName": "nsmf-pdusession",
+      "versions": [{"apiVersionInUri": "v1"}],
+      "scheme": "https",
+      "nfServiceStatus": "REGISTERED"
+    }
+  }
+}</div>
+<div class="callout callout-key"><strong>OSS Relevance:</strong> NRF is a critical OSS monitoring target. NF registration failures, discovery latency, and token issuance errors are early indicators of 5G Core health. OSS should monitor NRF via O1 and alert on NF de-registration events.</div>
+`},
+
+'billing': {
+  tag: 'BSS — Billing',
+  title: 'Billing, Charging & Revenue Management in 5G',
+  body: `
+<h4>4G vs 5G Charging Architecture</h4>
+<table>
+<tr><th>Layer</th><th>4G EPC</th><th>5G Core</th></tr>
+<tr><td>Online Charging</td><td>OCS (via Gy/Ro DIAMETER)</td><td>CHF (via N28, HTTP/2)</td></tr>
+<tr><td>Offline Charging</td><td>OFCS (via Rf DIAMETER)</td><td>CHF — Converged (N28)</td></tr>
+<tr><td>Policy Link</td><td>PCRF (Gy/Gx)</td><td>PCF + CHF coordinated</td></tr>
+<tr><td>Data Records</td><td>CDR via CGF</td><td>CDR via CHF → Mediation</td></tr>
+<tr><td>Interface Protocol</td><td>DIAMETER (complex)</td><td>HTTP/2 + JSON (simpler)</td></tr>
+</table>
+<h4>CDR Flow: Network → Invoice</h4>
+<ol>
+<li><strong>Usage Detection</strong>: UPF measures data volume via URRs (Usage Reporting Rules) installed by SMF via PFCP; UPF sends Usage Reports to SMF on N4</li>
+<li><strong>Charging Trigger</strong>: SMF sends Nchf_ConvergedCharging_Create/Update to CHF on N28; CHF decides grant quota (online) or records CDR (offline)</li>
+<li><strong>Mediation</strong>: CHF/SMF generates CDRs → Mediation system normalizes format (ASN.1 → CSV/XML), correlates partial CDRs, filters duplicates</li>
+<li><strong>Rating</strong>: Rating Engine applies tariff plan (from Product Catalog) to normalize CDR to billable event; accounts for bundles, promotions, roaming rates</li>
+<li><strong>Billing/Invoice</strong>: Billing system aggregates rated events → generates invoice → triggers collections or credit management workflows</li>
+</ol>
+<h4>Revenue Assurance Control Points</h4>
+<table>
+<tr><th>Control Point</th><th>What to Check</th><th>Risk if Missing</th></tr>
+<tr><td>N4/UPF URR → CHF</td><td>CDR count vs session count</td><td>Unmetered data (revenue loss)</td></tr>
+<tr><td>Mediation output</td><td>CDR volume vs CHF output</td><td>Dropped CDRs (leakage)</td></tr>
+<tr><td>Rating engine</td><td>Rated events vs mediation input</td><td>Wrong tariff application</td></tr>
+<tr><td>Invoice vs rated</td><td>Invoice amounts vs rated amounts</td><td>Billing errors, disputes</td></tr>
+</table>
+<div class="callout callout-warn"><strong>PM Key Metric:</strong> Revenue leakage %. Target: less than 0.1% of total billed revenue. A 1% leakage on a $1B operator = $10M annual loss. OSS-BSS reconciliation is the primary control.</div>
+`},
+
+'network-slicing': {
+  tag: '5G Core + OSS',
+  title: 'Network Slicing — End-to-End Architecture',
+  body: `
+<div class="arch-diagram">
+┌──────────────────────────────────────────────────────────┐
+│                 SLICE MANAGEMENT HIERARCHY                │
+│                                                          │
+│  BSS/OSS          CSMF               NSMF               │
+│  Customer    →  (Communication  →  (Network Slice    →  │
+│  Request       Slice Mgmt Fn)      Mgmt Fn)              │
+│                                        ↓                 │
+│                                    NSSMF (×3)            │
+│                               ┌────┬─────┬────┐          │
+│                               RAN  TN   Core  NSSMF      │
+│                               Slice Slice Slice           │
+└──────────────────────────────────────────────────────────┘
+
+Slice Identifiers:
+  NSSAI = set of S-NSSAIs requested by UE
+  S-NSSAI = SST (1 byte) + SD (3 bytes, optional)
+  SST 1 = eMBB, SST 2 = URLLC, SST 3 = mMTC
+  NSSI  = Network Slice Subnet Instance
+  NSI   = Network Slice Instance (end-to-end)</div>
+<h4>Slice Types Comparison</h4>
+<table>
+<tr><th>Type</th><th>SST</th><th>Use Cases</th><th>Key Requirement</th><th>QoS 5QI</th></tr>
+<tr><td>eMBB</td><td>1</td><td>Mobile broadband, video streaming, AR</td><td>High throughput (Gbps)</td><td>5QI 9 (best effort)</td></tr>
+<tr><td>URLLC</td><td>2</td><td>Industrial automation, remote surgery, V2X</td><td>Ultra-low latency (&lt;1ms), high reliability</td><td>5QI 82, 83</td></tr>
+<tr><td>mMTC</td><td>3</td><td>IoT sensors, smart meters, agriculture</td><td>Massive device density, low power</td><td>5QI 79</td></tr>
+</table>
+<h4>Slice Selection Flow</h4>
+<ol>
+<li>UE includes Requested NSSAI in Registration Request</li>
+<li>AMF calls NSSF: Nnssf_NSSelection_Get</li>
+<li>NSSF returns Allowed NSSAI + Target AMF Set (for correct slice)</li>
+<li>AMF may redirect UE to new AMF that serves the target slice</li>
+<li>SMF selection uses S-NSSAI + DNN to pick slice-specific SMF instance (via NRF)</li>
+</ol>
+<div class="callout callout-ai"><strong>AI Use Case:</strong> ML-based slice SLA prediction — NWDAF monitors each NSI's KPIs and predicts SLA breach 5–10 minutes ahead, triggering automated capacity reallocation via NSMF APIs.</div>
+`},
+
+'ran-oran': {
+  tag: 'RAN / O-RAN',
+  title: 'RAN & O-RAN Architecture — Disaggregated Stack',
+  body: `
+<div class="arch-diagram">
+┌─────────────────────────────────────────────────────┐
+│            O-RAN DISAGGREGATED ARCHITECTURE          │
+│                                                     │
+│  Non-RT RIC (SMO)                                   │
+│  ├── rApps (AI/ML policies, non-RT optimization)    │
+│  └── A1 interface ↓                                 │
+│                                                     │
+│  Near-RT RIC                                        │
+│  ├── xApps (near-RT RAN control: HO, load, beams)   │
+│  └── E2 interface ↓                                 │
+│                                                     │
+│  O-CU-CP  ←── F1-C ───  O-DU  ←── Open ──  O-RU   │
+│  (RRC,PDCP│              (L2:    Fronthaul   (L1:   │
+│   control)│    F1-U      MAC,RLC (eCPRI)     RF)    │
+│           │              PHY-H)               │     │
+│  O-CU-UP ─┘                                  │     │
+│  (PDCP UP)                                         │
+│  E1 between CU-CP and CU-UP                        │
+│  Xn between gNBs                                   │
+└─────────────────────────────────────────────────────┘</div>
+<h4>O-RAN Interface Summary</h4>
+<table>
+<tr><th>Interface</th><th>Between</th><th>Protocol</th><th>Latency Class</th><th>Function</th></tr>
+<tr><td>Open Fronthaul (OFH)</td><td>O-DU ↔ O-RU</td><td>eCPRI / Ethernet</td><td>Ultra-low (&lt;100μs)</td><td>IQ samples, beamforming ctrl</td></tr>
+<tr><td>F1-C</td><td>O-CU-CP ↔ O-DU</td><td>F1AP / SCTP</td><td>Low (ms)</td><td>RRC, UE context control</td></tr>
+<tr><td>F1-U</td><td>O-CU-UP ↔ O-DU</td><td>GTP-U / UDP</td><td>Low</td><td>User plane data</td></tr>
+<tr><td>E1</td><td>O-CU-CP ↔ O-CU-UP</td><td>E1AP / SCTP</td><td>Low</td><td>Bearer context mgmt</td></tr>
+<tr><td>Xn</td><td>gNB ↔ gNB</td><td>XnAP / SCTP</td><td>Medium</td><td>Handover, dual connectivity</td></tr>
+<tr><td>E2</td><td>Near-RT RIC ↔ E2 Node</td><td>E2AP / SCTP</td><td>10ms–1s</td><td>RAN control, telemetry</td></tr>
+<tr><td>A1</td><td>Non-RT RIC ↔ Near-RT RIC</td><td>REST/HTTP</td><td>Non-RT</td><td>AI/ML policy delivery</td></tr>
+<tr><td>O1</td><td>SMO ↔ O-RAN NFs</td><td>NETCONF/REST</td><td>Non-RT</td><td>FCAPS, config, PM data</td></tr>
+</table>
+<div class="callout callout-key"><strong>Rakuten Relevance:</strong> Rakuten Mobile built the world's first fully virtualized, cloud-native O-RAN network. All gNBs are disaggregated O-RU/O-DU/O-CU running on COTS hardware. This is the flagship proof point for O-RAN viability at scale.</div>
+`},
+
+'perf-mgmt': {
+  tag: 'OSS — Performance',
+  title: 'Performance Management & KPI Framework',
+  body: `
+<h4>PM Data Pipeline</h4>
+<ol>
+<li><strong>Counter Collection</strong>: NFs write PM counters to local PM files (XML, 3GPP TS 32.423 format) every 15 min; OSS EMS collects via SFTP or NETCONF streaming</li>
+<li><strong>Normalization</strong>: OSS normalizes vendor-specific counter names to standard KPI definitions (3GPP TS 28.552 for 5G NR)</li>
+<li><strong>KPI Calculation</strong>: Raw counters aggregated → KPI formulas applied (e.g. Cell Availability = (total slots - unavailable slots) / total slots)</li>
+<li><strong>Threshold Alerting</strong>: KPI thresholds trigger alarms fed to Fault Management; correlated with active incidents</li>
+<li><strong>Capacity Planning</strong>: Trend analysis on throughput, PRB utilization → capacity expansion triggers</li>
+</ol>
+<h4>Critical KPIs by Domain</h4>
+<table>
+<tr><th>Domain</th><th>KPI</th><th>Target</th><th>OSS Source</th></tr>
+<tr><td>RAN</td><td>Cell Availability</td><td>&gt;99.9%</td><td>O-DU PM counters</td></tr>
+<tr><td>RAN</td><td>PRB Utilization (DL/UL)</td><td>&lt;70% avg, &lt;90% peak</td><td>O-DU</td></tr>
+<tr><td>RAN</td><td>Handover Success Rate</td><td>&gt;98%</td><td>O-CU-CP</td></tr>
+<tr><td>RAN</td><td>DL/UL Throughput per cell</td><td>Site-specific</td><td>O-CU-UP</td></tr>
+<tr><td>5G Core</td><td>Registration Success Rate</td><td>&gt;99.5%</td><td>AMF PM</td></tr>
+<tr><td>5G Core</td><td>PDU Session Setup SR</td><td>&gt;99.5%</td><td>SMF PM</td></tr>
+<tr><td>5G Core</td><td>UPF Packet Loss Rate</td><td>&lt;0.01%</td><td>UPF PM</td></tr>
+<tr><td>5G Core</td><td>NRF Discovery Latency</td><td>&lt;10ms p99</td><td>NRF</td></tr>
+<tr><td>BSS</td><td>Order Fallout Rate</td><td>&lt;2%</td><td>OM system</td></tr>
+<tr><td>BSS</td><td>Billing Accuracy</td><td>&gt;99.9%</td><td>Revenue Assurance</td></tr>
+<tr><td>BSS</td><td>Time-to-Activate</td><td>&lt;4 hours</td><td>OM + OSS</td></tr>
+</table>
+`},
+
+'ai-usecases': {
+  tag: 'AI/ML',
+  title: 'AI/ML in Telecom — 25+ Production Use Cases',
+  body: `
+<h4>AI Use Cases by Domain</h4>
+<table>
+<tr><th>Domain</th><th>Use Case</th><th>ML Approach</th><th>Maturity</th></tr>
+<tr><td>OSS / Fault</td><td>Alarm correlation & root cause</td><td>Graph ML, clustering</td><td>★★★★★</td></tr>
+<tr><td>OSS / Fault</td><td>Predictive failure (HW)</td><td>LSTM, isolation forest</td><td>★★★★☆</td></tr>
+<tr><td>OSS / Config</td><td>Auto config generation</td><td>LLM (fine-tuned), templates</td><td>★★★☆☆</td></tr>
+<tr><td>OSS / Perf</td><td>Capacity forecasting</td><td>ARIMA, Prophet, XGBoost</td><td>★★★★★</td></tr>
+<tr><td>RAN</td><td>SON — load balancing</td><td>RL (Q-learning, PPO)</td><td>★★★★★</td></tr>
+<tr><td>RAN</td><td>Handover optimization</td><td>Supervised ML, RL</td><td>★★★★★</td></tr>
+<tr><td>RAN</td><td>Energy saving (sleep mode)</td><td>DRL, time-series</td><td>★★★★☆</td></tr>
+<tr><td>RAN</td><td>Beamforming optimization</td><td>DRL, digital twin</td><td>★★★☆☆</td></tr>
+<tr><td>5G Core</td><td>UPF traffic anomaly</td><td>Autoencoder, LOF</td><td>★★★★☆</td></tr>
+<tr><td>5G Core</td><td>Slice SLA prediction</td><td>LSTM, GBM</td><td>★★★☆☆</td></tr>
+<tr><td>5G Core</td><td>NWDAF UE behavior</td><td>Clustering (DBSCAN)</td><td>★★★☆☆</td></tr>
+<tr><td>BSS</td><td>Churn prediction</td><td>XGBoost, LightGBM</td><td>★★★★★</td></tr>
+<tr><td>BSS</td><td>Fraud detection</td><td>GNN, autoencoder</td><td>★★★★☆</td></tr>
+<tr><td>BSS</td><td>Next-best-action (offer)</td><td>Bandit, collaborative filter</td><td>★★★★☆</td></tr>
+<tr><td>BSS</td><td>CLV prediction</td><td>Survival models, GBM</td><td>★★★★☆</td></tr>
+<tr><td>BSS</td><td>Order fallout prediction</td><td>Random Forest, logistic</td><td>★★★☆☆</td></tr>
+<tr><td>GenAI</td><td>NOC copilot (RAG)</td><td>LLM + RAG (runbooks)</td><td>★★★★☆</td></tr>
+<tr><td>GenAI</td><td>Config generation (YANG)</td><td>LLM fine-tuned on YANG</td><td>★★★☆☆</td></tr>
+<tr><td>GenAI</td><td>Ticket auto-resolution</td><td>LLM + tool use</td><td>★★★★☆</td></tr>
+<tr><td>GenAI</td><td>Contract/SLA parsing</td><td>LLM document analysis</td><td>★★★★☆</td></tr>
+</table>
+<h4>NWDAF — 3GPP Native Analytics</h4>
+<ul>
+<li><strong>MTLF</strong> (Model Training Logical Function): Trains ML models using UDR data and NF event streams</li>
+<li><strong>ANLF</strong> (Analytics Logical Function): Serves analytics to consumer NFs (AMF, SMF, PCF, NSSF) via Nnwdaf_AnalyticsInfo API</li>
+<li><strong>Key Analytics</strong>: UE mobility analytics, UE communication analytics, NF load analytics, slice SLA, expected UE behavior</li>
+<li><strong>Consumers</strong>: PCF uses NWDAF output for dynamic QoS policy; NSSF uses mobility prediction for slice pre-provisioning</li>
+</ul>
+<div class="callout callout-ai"><strong>PM Interview Point:</strong> The shift from reactive to predictive OSS is the #1 value driver for AI in telecom. Operators report 30–50% reduction in MTTR when AI-powered alarm correlation replaces manual triage. Build a roadmap around P0 (fault correlation) → P1 (predictive maintenance) → P2 (autonomous remediation) → P3 (fully agentic NOC).</div>
+`},
+
+'agentic-telecom': {
+  tag: 'Agentic AI',
+  title: 'Agentic AI in Telecom — Architecture & Use Cases',
+  body: `
+<div class="arch-diagram">
+┌─────────────────────────────────────────────────────────┐
+│            AGENTIC AI PLATFORM FOR TELECOM               │
+│                                                         │
+│  ┌──────────────────────────────────────────────────┐   │
+│  │  ORCHESTRATION LAYER (LLM + Planner + Memory)    │   │
+│  │  "Autonomous NOC Brain" / Agentic Pipeline       │   │
+│  └───┬──────┬──────┬──────┬──────┬──────────────────┘   │
+│      │      │      │      │      │                      │
+│  ┌───▼──┐ ┌─▼───┐ ┌▼────┐ ┌▼───┐ ┌▼──────┐            │
+│  │Fault │ │Perf │ │Cfg  │ │BSS │ │GenAI  │  AGENTS     │
+│  │Agent │ │Agent│ │Agent│ │Agent│ │Copilot│            │
+│  └──┬───┘ └──┬──┘ └──┬──┘ └──┬─┘ └──┬───┘            │
+│     │        │        │       │       │                  │
+│  ┌──▼────────▼────────▼───────▼───────▼──────────────┐  │
+│  │         TOOL LAYER (API Integrations)              │  │
+│  │  OSS APIs │ NF O1 │ NETCONF │ TMF APIs │ Runbooks  │  │
+│  └────────────────────────────────────────────────────┘  │
+│  ┌─────────────────────────────────────────────────────┐  │
+│  │      HUMAN-IN-THE-LOOP (Approval Gate)              │  │
+│  │  Low-risk: auto-execute │ High-risk: human approve  │  │
+│  └─────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘</div>
+<h4>Top 10 Agentic AI Use Cases in Telecom</h4>
+<table>
+<tr><th>#</th><th>Use Case</th><th>Agent Type</th><th>Value</th></tr>
+<tr><td>1</td><td>Autonomous NOC — alarm-to-ticket-to-fix</td><td>Fault Agent + LLM + ITSM tool</td><td>70% reduction in L1 toil</td></tr>
+<tr><td>2</td><td>Self-healing RAN (O-RAN xApp)</td><td>Near-RT RIC xApp with RL policy</td><td>Automated cell recovery in &lt;30s</td></tr>
+<tr><td>3</td><td>YANG config generation & validation</td><td>LLM agent with NETCONF tool</td><td>90% reduction in config errors</td></tr>
+<tr><td>4</td><td>Capacity planning agent</td><td>Forecasting agent + PM data reader</td><td>Automated capex recommendations</td></tr>
+<tr><td>5</td><td>Slice SLA assurance agent</td><td>Multi-step planning + NSMF API calls</td><td>Proactive SLA breach prevention</td></tr>
+<tr><td>6</td><td>Fraud investigation agent</td><td>Graph traversal agent + GNN model</td><td>Real-time SIM swap fraud halt</td></tr>
+<tr><td>7</td><td>Order fallout remediation</td><td>BSS orchestration agent + OSS tools</td><td>Auto-retry fallout reduction 60%</td></tr>
+<tr><td>8</td><td>Network documentation Q&A</td><td>RAG agent over runbooks + YANG docs</td><td>NOC engineer productivity 3×</td></tr>
+<tr><td>9</td><td>Churn intervention agent</td><td>CLV model + offer catalog + outreach</td><td>Automated personalized retention</td></tr>
+<tr><td>10</td><td>Energy management agent</td><td>Cell sleep scheduler + load predictor</td><td>15–20% RAN energy reduction</td></tr>
+</table>
+<h4>Agentic AI Stack in Telecom</h4>
+<table>
+<tr><th>Layer</th><th>Component</th><th>Telecom Example</th></tr>
+<tr><td>Foundation</td><td>LLM (reasoning)</td><td>GPT-4o, Gemini, or telco-fine-tuned model</td></tr>
+<tr><td>Memory</td><td>Short-term context + long-term vector store</td><td>Redis (session) + Pinecone (runbooks, history)</td></tr>
+<tr><td>Tools</td><td>API integrations + code execution</td><td>OSS REST APIs, NETCONF, TMF641, Jira</td></tr>
+<tr><td>Orchestration</td><td>Multi-agent planner</td><td>LangGraph, AutoGen, or custom</td></tr>
+<tr><td>HITL</td><td>Approval workflow</td><td>ServiceNow approval gate for config changes</td></tr>
+<tr><td>Observability</td><td>Agent trace + audit log</td><td>LangSmith, custom audit trail</td></tr>
+</table>
+<div class="callout callout-warn"><strong>HITL Design Principle:</strong> Always classify actions by blast radius. Read-only queries (alarm lookup, KPI fetch) → fully autonomous. Low-risk changes (parameter adjustment within bounds) → auto-execute with audit log. High-risk (topology change, config rollback, outage action) → mandatory human approval gate before execution.</div>
+`},
+
+'tmf-apis': {
+  tag: 'Standards',
+  title: 'TM Forum APIs — BSS/OSS Integration Standards',
+  body: `
+<h4>Key TMF Open APIs</h4>
+<table>
+<tr><th>API</th><th>Name</th><th>Domain</th><th>Use Case</th></tr>
+<tr><td>TMF620</td><td>Product Catalog Mgmt</td><td>BSS</td><td>Create/manage product offerings, bundles, pricing</td></tr>
+<tr><td>TMF622</td><td>Product Order Mgmt</td><td>BSS</td><td>Customer order lifecycle, order status</td></tr>
+<tr><td>TMF629</td><td>Customer Mgmt</td><td>BSS/CRM</td><td>Customer profile CRUD, account management</td></tr>
+<tr><td>TMF632</td><td>Party Mgmt</td><td>BSS</td><td>Individual/organization entities</td></tr>
+<tr><td>TMF641</td><td>Service Order Mgmt</td><td>OSS/BSS</td><td>Service order decomposition and activation</td></tr>
+<tr><td>TMF638</td><td>Service Inventory</td><td>OSS</td><td>Active service instances</td></tr>
+<tr><td>TMF639</td><td>Resource Inventory</td><td>OSS</td><td>Network resource catalog and instances</td></tr>
+<tr><td>TMF642</td><td>Alarm Mgmt</td><td>OSS</td><td>Standardized alarm API for fault management</td></tr>
+<tr><td>TMF657</td><td>Service Quality Mgmt</td><td>OSS</td><td>SLA monitoring and quality indicators</td></tr>
+<tr><td>TMF666</td><td>Account Mgmt</td><td>BSS</td><td>Billing accounts, payment methods</td></tr>
+<tr><td>TMF688</td><td>Event Mgmt</td><td>Both</td><td>Event streaming / notification bus</td></tr>
+</table>
+<h4>TM Forum ODA (Open Digital Architecture)</h4>
+<ul>
+<li><strong>ODA Canvas</strong>: Defines 4 functional blocks — Core Commerce Mgmt, Intelligently Automated Infrastructure, Customer Experience Mgmt, Intelligence & Insights</li>
+<li><strong>ODA Components</strong>: Microservice building blocks with defined TMF API contracts — enables vendor-neutral assembly</li>
+<li><strong>Kubernetes-native</strong>: ODA components run as K8s pods with defined health/readiness, Helm charts, operator patterns</li>
+<li><strong>IG1142</strong>: ODA Component definition standard — Rakuten Mobile and major operators are ODA adopters</li>
+</ul>
+<div class="callout callout-key"><strong>Interview Angle:</strong> TM Forum API adoption is the key enabler for BSS/OSS modernization. When evaluating vendors, ask: "Which TMF Open APIs do you expose natively vs. via adapter?" Native TMF APIs = lower integration cost, faster time-to-market, easier vendor swap.</div>
+`},
+
+'fault-mgmt': {
+  tag: 'OSS — Fault',
+  title: 'Fault Management — Alarm to Resolution',
+  body: `
+<h4>Alarm Lifecycle</h4>
+<ol>
+<li><strong>Detection</strong>: NF/NE detects fault → raises alarm via SNMP Trap, NETCONF notification, or Kafka event</li>
+<li><strong>Collection</strong>: EMS/OSS collects alarm → normalizes to standard format (TMF642, X.733)</li>
+<li><strong>Correlation</strong>: Alarm correlation engine groups related alarms (e.g. feeder fiber cut → 50 cell alarms in 1 root cause)</li>
+<li><strong>Enrichment</strong>: Add topology context (which sites affected, which customers impacted, SLA exposure)</li>
+<li><strong>Triage</strong>: Auto-classify severity, assign to correct team, create trouble ticket in ITSM</li>
+<li><strong>Resolution</strong>: NOC/field engineer resolves → clears alarm → closes ticket; MTTR measured</li>
+</ol>
+<h4>Alarm Correlation Techniques</h4>
+<table>
+<tr><th>Technique</th><th>Method</th><th>Best For</th></tr>
+<tr><td>Time-window correlation</td><td>Group alarms within N-second window from same region</td><td>Physical layer faults (fiber, power)</td></tr>
+<tr><td>Topology-based</td><td>Map alarms to network topology graph, find root NE</td><td>Cascade failures</td></tr>
+<tr><td>Rule-based</td><td>If-then rules from expert knowledge (defined in OSSs)</td><td>Known patterns, fast execution</td></tr>
+<tr><td>ML-based (clustering)</td><td>Unsupervised clustering of alarm vectors</td><td>Unknown patterns, new alarm types</td></tr>
+<tr><td>Graph Neural Network</td><td>Train on historical alarm-to-RCA pairs</td><td>Production AI-powered NOC</td></tr>
+</table>
+<div class="callout callout-info"><strong>Key Metric:</strong> Alarm-to-ticket ratio. Best-in-class OSS systems reduce 10,000 raw alarms → 50 meaningful trouble tickets through correlation. Target: &lt;1% of raw alarms become tickets.</div>
+`},
+
+'provisioning': {
+  tag: 'OSS — Provisioning',
+  title: 'Service Provisioning & Activation Flow',
+  body: `
+<h4>Order-to-Activate Flow</h4>
+<div class="arch-diagram">
+CRM Order → Order Mgmt → Service Orchestrator → Resource Orchestrator
+                                ↓                        ↓
+                        Service Config DB         NF Provisioning
+                        (what to configure)       (NETCONF/YANG to NF)
+                                                         ↓
+                                                  NF activated
+                                                         ↓
+                                              Confirmation → BSS → Customer</div>
+<h4>Provisioning Interfaces</h4>
+<table>
+<tr><th>Interface</th><th>Protocol</th><th>Used For</th></tr>
+<tr><td>NETCONF + YANG</td><td>XML over SSH</td><td>NF configuration (3GPP TS 28.541)</td></tr>
+<tr><td>RESTCONF</td><td>HTTP + JSON</td><td>Lighter NETCONF alternative</td></tr>
+<tr><td>OpenConfig</td><td>YANG models</td><td>Vendor-neutral RAN/transport config</td></tr>
+<tr><td>gRPC + proto</td><td>HTTP/2</td><td>Streaming telemetry + config (gNMI)</td></tr>
+<tr><td>TMF641</td><td>REST + JSON</td><td>Service order API (BSS→OSS)</td></tr>
+</table>
+<h4>Day 0 / Day 1 / Day 2 Operations</h4>
+<ul>
+<li><strong>Day 0</strong>: Design — network design, capacity plan, YANG model development</li>
+<li><strong>Day 1</strong>: Deploy — initial provisioning, NF bring-up, baseline config push</li>
+<li><strong>Day 2</strong>: Operate — ongoing config changes, feature activation, SW upgrades, fault response</li>
+</ul>
+`},
+
+'3gpp-releases': {
+  tag: 'Standards',
+  title: '3GPP Releases — Rel-15 through Rel-18 (5G-Advanced)',
+  body: `
+<h4>Release Timeline</h4>
+<table>
+<tr><th>Release</th><th>Completed</th><th>Name</th><th>Key 5G Features</th></tr>
+<tr><td>Rel-15</td><td>2018</td><td>5G Phase 1 (Baseline)</td><td>5G NR SA/NSA, 5G Core SBA, NR FR1/FR2, eMBB baseline, network slicing</td></tr>
+<tr><td>Rel-16</td><td>2020</td><td>5G Phase 2</td><td>URLLC enhancements, V2X (C-V2X), IAB, NR-U (unlicensed), MIMO enhancements, IIoT, NPN (private networks)</td></tr>
+<tr><td>Rel-17</td><td>2022</td><td>5G enhancements</td><td>NR-Light (RedCap for IoT), NTN (non-terrestrial), sidelink (D2D), multicast/broadcast, RAN slicing, 5G Core enhancements</td></tr>
+<tr><td>Rel-18</td><td>2024</td><td>5G-Advanced</td><td>AI/ML for RAN (native), XR (extended reality) optimization, NR coverage enhancements, ambient IoT, energy efficiency KPIs, NWDAF enhancements</td></tr>
+</table>
+<h4>Why This Matters for OSS PM</h4>
+<ul>
+<li><strong>Each release adds new NF services and interfaces</strong> — OSS must track which release is deployed to correctly configure O1 models</li>
+<li><strong>YANG models are release-versioned</strong> — 3GPP TS 28.541 (Rel-16/17/18) defines different NF YANG models</li>
+<li><strong>Rel-18 AI/ML for RAN</strong> is the standardization of NWDAF-based RAN optimization, directly relevant to OSS AI roadmap</li>
+</ul>
+`},
+
+'sbi-protocols': {
+  tag: 'Protocols',
+  title: 'SBI & Southbound Protocols in 5G',
+  body: `
+<h4>Protocol Stack by Interface</h4>
+<table>
+<tr><th>Interface Type</th><th>Protocol</th><th>Layer</th><th>Notes</th></tr>
+<tr><td>SBI (NF-NF)</td><td>HTTP/2 + JSON + TLS</td><td>Application</td><td>All 5G Core NF-NF calls, OAuth2 auth</td></tr>
+<tr><td>N4 (SMF-UPF)</td><td>PFCP / UDP</td><td>Transport</td><td>Packet Forwarding Control Protocol, session rules</td></tr>
+<tr><td>N2 (AMF-gNB)</td><td>NGAP / SCTP</td><td>App / Transport</td><td>NG Application Protocol, reliable signaling</td></tr>
+<tr><td>N3 (gNB-UPF)</td><td>GTP-U / UDP / IP</td><td>User Plane</td><td>GPRS Tunneling Protocol user plane</td></tr>
+<tr><td>NAS</td><td>NAS-5GS</td><td>Logical</td><td>Between UE and AMF/SMF, encapsulated in N1/NGAP</td></tr>
+<tr><td>OSS/CM (NETCONF)</td><td>NETCONF / SSH (or TLS)</td><td>App / Transport</td><td>Config management, YANG data models</td></tr>
+<tr><td>OSS/PM (streaming)</td><td>gRPC / HTTP/2</td><td>Application</td><td>gNMI streaming telemetry for PM data</td></tr>
+<tr><td>OSS/FM (SNMP)</td><td>SNMP v2c/v3 / UDP</td><td>Application</td><td>Legacy fault management, trap-based</td></tr>
+<tr><td>E2 (RIC)</td><td>E2AP / SCTP</td><td>App / Transport</td><td>Near-RT RIC to E2 node control</td></tr>
+<tr><td>Charging (DIAMETER)</td><td>DIAMETER / TCP-SCTP</td><td>Application</td><td>Legacy 4G Gy/Gx/Rx, still used in hybrid cores</td></tr>
+</table>
+<h4>PFCP Deep Dive (N4 Interface)</h4>
+<ul>
+<li><strong>PDR</strong> (Packet Detection Rule): Matches incoming packets to a rule</li>
+<li><strong>FAR</strong> (Forwarding Action Rule): What to do with matched packets (forward/drop/buffer)</li>
+<li><strong>URR</strong> (Usage Reporting Rule): When to report usage (volume/time thresholds)</li>
+<li><strong>QER</strong> (QoS Enforcement Rule): Apply QoS (rate limiting, marking)</li>
+</ul>
+`},
+
+'security-telecom': {
+  tag: '5G Security',
+  title: '5G Security Architecture',
+  body: `
+<h4>Key Security Features in 5G Core</h4>
+<table>
+<tr><th>Feature</th><th>NF</th><th>Mechanism</th><th>Problem Solved</th></tr>
+<tr><td>SUCI (Identity Concealment)</td><td>UE + AUSF + UDM</td><td>ECIES public-key encryption of SUPI</td><td>Prevents IMSI catching on air interface</td></tr>
+<tr><td>5G-AKA</td><td>AUSF, UDM, AMF</td><td>Mutual auth, home network confirmation</td><td>Prevents rogue base stations, bidding down</td></tr>
+<tr><td>SEPP</td><td>SEPP (boundary NF)</td><td>IPX/HTTP filtering, JWE encryption</td><td>Secures inter-PLMN roaming signaling</td></tr>
+<tr><td>NRF OAuth2</td><td>NRF</td><td>JWT tokens for NF-to-NF access</td><td>Prevents unauthorized NF service calls</td></tr>
+<tr><td>NDS/IP</td><td>All NFs</td><td>IPSec on NF interfaces (N2, N3, N4)</td><td>Transport-layer security between NFs</td></tr>
+</table>
+<h4>Telecom-Specific Threat Vectors</h4>
+<ul>
+<li><strong>SS7 attacks</strong> (4G/legacy): Location tracking, call interception via SS7 MAP vulnerabilities — 5G SBA eliminates SS7 in Core</li>
+<li><strong>Diameter attacks</strong>: Similar to SS7 but for 4G Core — still relevant in hybrid 4G/5G roaming</li>
+<li><strong>O-RAN threat surface</strong>: Disaggregated O-RAN introduces new attack vectors — E2 interface manipulation, xApp supply chain</li>
+<li><strong>API security</strong>: 5G SBI is HTTP/2-based — standard web API threats (injection, broken auth) now apply to telecom Core</li>
+</ul>
+`}
+
+};
+
+// ─── UI Engine ────────────────────────────────────────────────────────────────
+function openTopic(id) {
+  const t = topics[id];
+  if (!t) {
+    document.getElementById('detail-tag').textContent = 'Reference';
+    document.getElementById('detail-title').textContent = id.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+    document.getElementById('detail-body').innerHTML = '<div class="callout callout-info"><strong>Coming soon:</strong> This topic is in progress. The core topics are fully available — check BSS Overview, 5G Core, NF Reference, Complete 5G Flow, and Agentic AI in Telecom for the key content.</div>';
+  } else {
+    document.getElementById('detail-tag').textContent = t.tag;
+    document.getElementById('detail-title').textContent = t.title;
+    document.getElementById('detail-body').innerHTML = t.body;
+  }
+  const overlay = document.getElementById('detail-overlay');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('detail-panel').scrollTop = 0;
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function closeOnBg(e) {
+  if (e.target === document.getElementById('detail-overlay')) closeDetail();
+}
+
+// Tab navigation — unified handler
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Update active state
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    // Perform action
+    const action = tab.dataset.action;
+    if (action === 'scroll-top') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (action === 'scroll-section') {
+      const el = document.getElementById(tab.dataset.target);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (action === 'open-topic') {
+      openTopic(tab.dataset.topic);
+    }
+  });
+});
+
+// ESC key
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+</script>
+</body>
+</html>
